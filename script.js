@@ -16,9 +16,13 @@ const calculatorHistory = document.querySelector("#calculatorHistory");
 const calculatorKeys = document.querySelector(".calculator-keys");
 const reactionStage = document.querySelector("#reactionStage");
 const reactionStatus = document.querySelector("#reactionStatus");
-const memoryBoard = document.querySelector("#memoryBoard");
-const memoryStatus = document.querySelector("#memoryStatus");
-const memoryReset = document.querySelector("#memoryReset");
+const songSelect = document.querySelector("#songSelect");
+const songGuide = document.querySelector("#songGuide");
+const musicPads = document.querySelector("#musicPads");
+const songPlay = document.querySelector("#songPlay");
+const songPractice = document.querySelector("#songPractice");
+const songStop = document.querySelector("#songStop");
+const musicStatus = document.querySelector("#musicStatus");
 const tapGame = document.querySelector("#tapGame");
 const tapTarget = document.querySelector("#tapTarget");
 const tapStatus = document.querySelector("#tapStatus");
@@ -37,9 +41,10 @@ const calorieActivity = document.querySelector("#calorieActivity");
 const calorieMinutes = document.querySelector("#calorieMinutes");
 const calorieButton = document.querySelector("#calorieButton");
 const calorieResult = document.querySelector("#calorieResult");
-const reversiBoard = document.querySelector("#reversiBoard");
-const reversiStatus = document.querySelector("#reversiStatus");
-const reversiReset = document.querySelector("#reversiReset");
+const gomokuBoard = document.querySelector("#gomokuBoard");
+const gomokuStatus = document.querySelector("#gomokuStatus");
+const gomokuReset = document.querySelector("#gomokuReset");
+const fishWrap = document.querySelector("#fishWrap");
 const fishButton = document.querySelector("#fishButton");
 const fishText = document.querySelector("#fishText");
 const fishStatus = document.querySelector("#fishStatus");
@@ -269,13 +274,142 @@ const reactionState = {
   startTime: 0,
 };
 
-const memorySymbols = ["A", "B", "C", "D"];
-const memoryState = {
-  cards: [],
-  openedIndexes: [],
-  matchedCount: 0,
-  moves: 0,
-  locked: false,
+const musicSongs = {
+  mama: {
+    name: "妈妈的爱",
+    guide: "偏温柔一点，Pad 1 到 Pad 4 是主旋律，Pad 9 到 Pad 12 是氛围和收尾。",
+    palette: [
+      ["#ef4444", "#be123c"],
+      ["#fb7185", "#e11d48"],
+      ["#f97316", "#ea580c"],
+      ["#f59e0b", "#d97706"],
+      ["#22c55e", "#15803d"],
+      ["#14b8a6", "#0f766e"],
+      ["#3b82f6", "#2563eb"],
+      ["#6366f1", "#4338ca"],
+      ["#8b5cf6", "#7c3aed"],
+      ["#d946ef", "#c026d3"],
+      ["#ec4899", "#be185d"],
+      ["#f43f5e", "#be123c"],
+    ],
+    pads: [
+      { label: "主歌 A", sequence: [["G4", 0.24], ["A4", 0.24], ["B4", 0.38]] },
+      { label: "主歌 B", sequence: [["A4", 0.24], ["G4", 0.24], ["E4", 0.4]] },
+      { label: "副歌 A", sequence: [["D4", 0.24], ["G4", 0.24], ["A4", 0.34], ["B4", 0.4]] },
+      { label: "副歌 B", sequence: [["B4", 0.24], ["A4", 0.24], ["G4", 0.45]] },
+      { label: "和声 1", sequence: [["E4", 0.28, "pad"], ["G4", 0.28, "pad"], ["B4", 0.52, "pad"]] },
+      { label: "和声 2", sequence: [["D4", 0.28, "pad"], ["F#4", 0.28, "pad"], ["A4", 0.52, "pad"]] },
+      { label: "低音 1", sequence: [["G3", 0.38, "bass"], ["D4", 0.3, "bass"]] },
+      { label: "低音 2", sequence: [["E3", 0.38, "bass"], ["B3", 0.3, "bass"]] },
+      { label: "点缀 1", sequence: [["B4", 0.18], ["D5", 0.18], ["B4", 0.18], ["A4", 0.34]] },
+      { label: "点缀 2", sequence: [["G4", 0.18], ["A4", 0.18], ["G4", 0.18], ["E4", 0.34]] },
+      { label: "收束", sequence: [["D4", 0.24], ["G4", 0.28], ["B4", 0.55]] },
+      { label: "尾音", sequence: [["G4", 0.7, "pad"]] },
+    ],
+    demo: [0, 1, 2, 3, 4, 6, 2, 3, 10, 11],
+    melody: [0, 1, 2, 3, 2, 3, 10, 11],
+  },
+  send51: {
+    name: "第51次发送",
+    guide: "这一套更偏电子感，前四个 Pad 是主句，中间是节奏和氛围，后面是爆点。",
+    palette: [
+      ["#06b6d4", "#0f766e"],
+      ["#22c55e", "#15803d"],
+      ["#84cc16", "#4d7c0f"],
+      ["#f59e0b", "#b45309"],
+      ["#fb7185", "#be185d"],
+      ["#c084fc", "#7c3aed"],
+      ["#60a5fa", "#2563eb"],
+      ["#38bdf8", "#0369a1"],
+      ["#14b8a6", "#115e59"],
+      ["#34d399", "#047857"],
+      ["#f97316", "#c2410c"],
+      ["#ef4444", "#991b1b"],
+    ],
+    pads: [
+      { label: "句子 1", sequence: [["E4", 0.2], ["G4", 0.2], ["B4", 0.2], ["G4", 0.28]] },
+      { label: "句子 2", sequence: [["D4", 0.2], ["E4", 0.2], ["G4", 0.2], ["E4", 0.3]] },
+      { label: "句子 3", sequence: [["A4", 0.18], ["B4", 0.18], ["D5", 0.22], ["B4", 0.34]] },
+      { label: "句子 4", sequence: [["G4", 0.18], ["A4", 0.18], ["B4", 0.18], ["G4", 0.36]] },
+      { label: "氛围 1", sequence: [["E4", 0.5, "pad"], ["B4", 0.5, "pad"]] },
+      { label: "氛围 2", sequence: [["D4", 0.5, "pad"], ["A4", 0.5, "pad"]] },
+      { label: "低频 1", sequence: [["E3", 0.24, "bass"], ["E3", 0.24, "bass"], ["B3", 0.24, "bass"]] },
+      { label: "低频 2", sequence: [["D3", 0.24, "bass"], ["D3", 0.24, "bass"], ["A3", 0.24, "bass"]] },
+      { label: "副句 1", sequence: [["B4", 0.18], ["A4", 0.18], ["G4", 0.22], ["E4", 0.35]] },
+      { label: "副句 2", sequence: [["D5", 0.18], ["B4", 0.18], ["A4", 0.22], ["G4", 0.35]] },
+      { label: "爆点 1", sequence: [["E5", 0.14], ["D5", 0.14], ["B4", 0.18], ["G4", 0.32]] },
+      { label: "爆点 2", sequence: [["G4", 0.18], ["B4", 0.18], ["D5", 0.18], ["E5", 0.4]] },
+    ],
+    demo: [0, 1, 4, 6, 2, 3, 5, 7, 8, 9, 10, 11],
+    melody: [0, 1, 2, 3, 8, 9, 10, 11],
+  },
+  faded: {
+    name: "Faded",
+    guide: "这套更像电音 Pad，前四块是经典旋律，中间是铺底，后面是推进和收尾。",
+    palette: [
+      ["#0ea5e9", "#1d4ed8"],
+      ["#38bdf8", "#0284c7"],
+      ["#60a5fa", "#2563eb"],
+      ["#818cf8", "#4338ca"],
+      ["#a78bfa", "#7c3aed"],
+      ["#c084fc", "#9333ea"],
+      ["#f472b6", "#db2777"],
+      ["#fb7185", "#e11d48"],
+      ["#f97316", "#ea580c"],
+      ["#facc15", "#ca8a04"],
+      ["#4ade80", "#16a34a"],
+      ["#2dd4bf", "#0f766e"],
+    ],
+    pads: [
+      { label: "Hook 1", sequence: [["A4", 0.22], ["G4", 0.22], ["E4", 0.32], ["D4", 0.38]] },
+      { label: "Hook 2", sequence: [["A4", 0.22], ["G4", 0.22], ["E4", 0.32], ["C4", 0.38]] },
+      { label: "Hook 3", sequence: [["C5", 0.22], ["B4", 0.22], ["G4", 0.3], ["E4", 0.42]] },
+      { label: "Hook 4", sequence: [["A4", 0.22], ["G4", 0.22], ["E4", 0.32], ["B3", 0.42]] },
+      { label: "Pad 1", sequence: [["A4", 0.62, "pad"], ["E5", 0.62, "pad"]] },
+      { label: "Pad 2", sequence: [["F4", 0.62, "pad"], ["C5", 0.62, "pad"]] },
+      { label: "Bass 1", sequence: [["A3", 0.3, "bass"], ["A3", 0.3, "bass"], ["E4", 0.3, "bass"]] },
+      { label: "Bass 2", sequence: [["F3", 0.3, "bass"], ["F3", 0.3, "bass"], ["C4", 0.3, "bass"]] },
+      { label: "Rise 1", sequence: [["E4", 0.16], ["G4", 0.16], ["A4", 0.16], ["C5", 0.32]] },
+      { label: "Rise 2", sequence: [["D4", 0.16], ["E4", 0.16], ["G4", 0.16], ["B4", 0.32]] },
+      { label: "Drop 1", sequence: [["A4", 0.12], ["E5", 0.12], ["D5", 0.12], ["C5", 0.3]] },
+      { label: "Drop 2", sequence: [["G4", 0.12], ["B4", 0.12], ["A4", 0.12], ["E4", 0.34]] },
+    ],
+    demo: [4, 6, 0, 1, 5, 7, 2, 3, 8, 9, 10, 11],
+    melody: [0, 1, 2, 3, 0, 1, 10, 11],
+  },
+};
+
+const noteFrequencies = {
+  C3: 130.81,
+  D3: 146.83,
+  E3: 164.81,
+  F3: 174.61,
+  G3: 196.0,
+  A3: 220.0,
+  B3: 246.94,
+  C4: 261.63,
+  "C#4": 277.18,
+  D4: 293.66,
+  "D#4": 311.13,
+  E4: 329.63,
+  F4: 349.23,
+  "F#4": 369.99,
+  G4: 392.0,
+  "G#4": 415.3,
+  A4: 440.0,
+  "A#4": 466.16,
+  B4: 493.88,
+  C5: 523.25,
+  D5: 587.33,
+  E5: 659.25,
+};
+
+const musicState = {
+  currentSong: "mama",
+  practiceIndex: 0,
+  practiceMode: false,
+  audioContext: null,
+  playTimers: [],
 };
 
 const tapState = {
@@ -316,19 +450,15 @@ const breathState = {
   timerId: null,
 };
 
-const reversiDirections = [
-  [-1, -1],
-  [-1, 0],
-  [-1, 1],
-  [0, -1],
-  [0, 1],
-  [1, -1],
+const gomokuDirections = [
   [1, 0],
+  [0, 1],
   [1, 1],
+  [1, -1],
 ];
 
-const reversiState = {
-  board: Array(64).fill(""),
+const gomokuState = {
+  board: Array(15 * 15).fill(""),
   current: "black",
   finished: false,
 };
@@ -337,12 +467,34 @@ const fishState = {
   merit: 0,
   combo: 0,
   timerId: null,
+  audioContext: null,
 };
+
+const fishBlessings = [
+  "大运+1",
+  "幸运+1",
+  "平安+1",
+  "福气+1",
+  "顺利+1",
+  "灵感+1",
+  "气场+1",
+  "自律+1",
+  "专注+1",
+  "状态+1",
+  "元气+1",
+  "开心+1",
+  "财气+1",
+  "桃花+1",
+  "健康+1",
+  "耐心+1",
+  "智慧+1",
+  "清醒+1",
+];
 
 const dailyTips = [
   "先玩一局节奏连击，把手感热起来。",
   "做 3 轮呼吸节拍，再去做正事。",
-  "试试黑白棋，练一下判断和耐心。",
+  "试试五子棋，练一下判断和耐心。",
   "敲 20 下木鱼，给今天加一点仪式感。",
 ];
 
@@ -410,42 +562,186 @@ const getReactionReport = (cost) => {
 点击可再测一次。`;
 };
 
-const updateMemoryStatus = () => {
-  memoryStatus.textContent = `步数：${memoryState.moves}，已配对：${memoryState.matchedCount}/4`;
-};
+const getMusicAudioContext = () => {
+  if (!musicState.audioContext) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
 
-const renderMemoryBoard = () => {
-  memoryBoard.innerHTML = "";
-
-  memoryState.cards.forEach((card, index) => {
-    const button = document.createElement("button");
-    button.className = "memory-card";
-    button.type = "button";
-    button.dataset.index = `${index}`;
-
-    if (card.open || card.matched) {
-      button.textContent = card.symbol;
-      button.classList.add(card.matched ? "is-matched" : "is-open");
-    } else {
-      button.textContent = "?";
+    if (!AudioContextClass) {
+      return null;
     }
 
-    memoryBoard.append(button);
+    musicState.audioContext = new AudioContextClass();
+  }
+
+  return musicState.audioContext;
+};
+
+const renderMusicPads = () => {
+  const song = musicSongs[musicState.currentSong];
+
+  musicPads.querySelectorAll(".music-pad").forEach((pad, index) => {
+    const clip = song.pads[index];
+    const [topColor, bottomColor] = song.palette[index];
+    pad.textContent = clip.label;
+    pad.style.setProperty("--pad-top", topColor);
+    pad.style.setProperty("--pad-bottom", bottomColor);
   });
 };
 
-const resetMemoryGame = () => {
-  memoryState.cards = shuffle([...memorySymbols, ...memorySymbols]).map((symbol) => ({
-    symbol,
-    open: false,
-    matched: false,
-  }));
-  memoryState.openedIndexes = [];
-  memoryState.matchedCount = 0;
-  memoryState.moves = 0;
-  memoryState.locked = false;
-  updateMemoryStatus();
-  renderMemoryBoard();
+const flashMusicPad = (padIndex) => {
+  const pad = musicPads.querySelector(`[data-pad="${padIndex}"]`);
+
+  if (!pad) {
+    return;
+  }
+
+  pad.classList.add("is-active");
+  window.setTimeout(() => {
+    pad.classList.remove("is-active");
+  }, 180);
+};
+
+const playMusicNote = async (note, duration = 0.34, tone = "lead") => {
+  const audioContext = getMusicAudioContext();
+
+  if (!audioContext) {
+    return;
+  }
+
+  if (audioContext.state === "suspended") {
+    await audioContext.resume();
+  }
+
+  const nowTime = audioContext.currentTime;
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  const filterNode = audioContext.createBiquadFilter();
+
+  oscillator.type = tone === "bass" ? "sawtooth" : tone === "pad" ? "sine" : "triangle";
+  oscillator.frequency.setValueAtTime(noteFrequencies[note], nowTime);
+  filterNode.type = "lowpass";
+  filterNode.frequency.setValueAtTime(tone === "bass" ? 1200 : tone === "pad" ? 1800 : 2400, nowTime);
+
+  gainNode.gain.setValueAtTime(0.0001, nowTime);
+  gainNode.gain.exponentialRampToValueAtTime(tone === "pad" ? 0.18 : 0.24, nowTime + 0.02);
+  gainNode.gain.exponentialRampToValueAtTime(0.0001, nowTime + duration);
+
+  oscillator.connect(filterNode);
+  filterNode.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  oscillator.start(nowTime);
+  oscillator.stop(nowTime + duration + 0.03);
+};
+
+const clearMusicTimers = () => {
+  musicState.playTimers.forEach((timerId) => window.clearTimeout(timerId));
+  musicState.playTimers = [];
+};
+
+const updateSongSelection = () => {
+  songSelect.querySelectorAll(".song-chip").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.song === musicState.currentSong);
+  });
+};
+
+const updateMusicGuide = () => {
+  const song = musicSongs[musicState.currentSong];
+  songGuide.textContent = `${song.name}：${song.guide}`;
+};
+
+const selectSong = (songKey) => {
+  musicState.currentSong = songKey;
+  musicState.practiceIndex = 0;
+  musicState.practiceMode = false;
+  updateSongSelection();
+  updateMusicGuide();
+  renderMusicPads();
+  musicStatus.textContent = `当前歌曲：${musicSongs[songKey].name}。点任意 Pad 就能出片段，也可以点“自动连播”或“主旋律”。`;
+};
+
+const autoplaySong = () => {
+  const song = musicSongs[musicState.currentSong];
+  clearMusicTimers();
+  musicState.practiceMode = false;
+  musicState.practiceIndex = 0;
+  musicStatus.textContent = `正在示范：${song.name}`;
+
+  song.demo.forEach((padIndex, index) => {
+    const timerId = window.setTimeout(() => {
+      playPadSequence(padIndex);
+
+      if (index === song.demo.length - 1) {
+        musicStatus.textContent = `示范结束。现在可以自己弹 ${song.name}。`;
+      }
+    }, index * 430);
+
+    musicState.playTimers.push(timerId);
+  });
+};
+
+const startPracticeMode = () => {
+  clearMusicTimers();
+  musicState.practiceMode = true;
+  musicState.practiceIndex = 0;
+  const firstPad = musicSongs[musicState.currentSong].melody[0];
+  const firstLabel = musicSongs[musicState.currentSong].pads[firstPad].label;
+  musicStatus.textContent = `主旋律开始。先点 ${firstLabel}`;
+  flashMusicPad(firstPad);
+};
+
+const stopMusicMode = () => {
+  clearMusicTimers();
+  musicState.practiceMode = false;
+  musicState.practiceIndex = 0;
+  musicStatus.textContent = `已停止。继续自由打 Pad，或者重新开始 ${musicSongs[musicState.currentSong].name}。`;
+};
+
+const playPadSequence = (padIndex) => {
+  const clip = musicSongs[musicState.currentSong].pads[padIndex];
+  let elapsed = 0;
+
+  flashMusicPad(padIndex);
+
+  clip.sequence.forEach(([note, duration, tone = "lead"]) => {
+    const timerId = window.setTimeout(() => {
+      playMusicNote(note, duration, tone).catch(() => {});
+    }, elapsed * 1000);
+
+    musicState.playTimers.push(timerId);
+    elapsed += duration;
+  });
+};
+
+const handleMusicInput = (padIndex) => {
+  playPadSequence(padIndex);
+
+  if (!musicState.practiceMode) {
+    return;
+  }
+
+  const song = musicSongs[musicState.currentSong];
+  const expectedPad = song.melody[musicState.practiceIndex];
+
+  if (padIndex !== expectedPad) {
+    const expectedLabel = song.pads[expectedPad].label;
+    musicStatus.textContent = `这一步应该点 ${expectedLabel}，再试一次。`;
+    flashMusicPad(expectedPad);
+    return;
+  }
+
+  musicState.practiceIndex += 1;
+
+  if (musicState.practiceIndex >= song.melody.length) {
+    musicState.practiceMode = false;
+    musicStatus.textContent = `${song.name} 主旋律完成。再打一遍会更顺。`;
+    return;
+  }
+
+  const nextPad = song.melody[musicState.practiceIndex];
+  const nextLabel = song.pads[nextPad].label;
+  musicStatus.textContent = `对了。下一步点 ${nextLabel}`;
+  flashMusicPad(nextPad);
 };
 
 const updateTapStatus = () => {
@@ -583,113 +879,132 @@ const calculateCalories = () => {
 建议：运动后补水，别用高糖饮料把消耗又喝回来。`;
 };
 
-const getReversiIndex = (row, col) => row * 8 + col;
+const getGomokuIndex = (row, col) => row * 15 + col;
 
-const getReversiFlips = (index, player, board = reversiState.board) => {
-  if (board[index]) {
-    return [];
-  }
+const renderGomoku = () => {
+  gomokuBoard.innerHTML = "";
 
-  const row = Math.floor(index / 8);
-  const col = index % 8;
-  const opponent = player === "black" ? "white" : "black";
-  const flips = [];
-
-  reversiDirections.forEach(([rowStep, colStep]) => {
-    const line = [];
-    let nextRow = row + rowStep;
-    let nextCol = col + colStep;
-
-    while (nextRow >= 0 && nextRow < 8 && nextCol >= 0 && nextCol < 8) {
-      const nextIndex = getReversiIndex(nextRow, nextCol);
-      const value = board[nextIndex];
-
-      if (value === opponent) {
-        line.push(nextIndex);
-      } else if (value === player) {
-        flips.push(...line);
-        break;
-      } else {
-        break;
-      }
-
-      nextRow += rowStep;
-      nextCol += colStep;
-    }
-  });
-
-  return flips;
-};
-
-const getReversiMoves = (player) => {
-  return reversiState.board
-    .map((_, index) => index)
-    .filter((index) => getReversiFlips(index, player).length > 0);
-};
-
-const updateReversiStatus = () => {
-  const blackCount = reversiState.board.filter((piece) => piece === "black").length;
-  const whiteCount = reversiState.board.filter((piece) => piece === "white").length;
-  const moves = getReversiMoves(reversiState.current);
-  const playerName = reversiState.current === "black" ? "黑棋" : "白棋";
-
-  if (reversiState.finished) {
-    const winner = blackCount === whiteCount ? "平局" : blackCount > whiteCount ? "黑棋赢" : "白棋赢";
-    reversiStatus.textContent = `${winner}。黑 ${blackCount} : 白 ${whiteCount}`;
-    return;
-  }
-
-  reversiStatus.textContent = `${playerName}落子。黑 ${blackCount} : 白 ${whiteCount}，可落点：${moves.length}`;
-};
-
-const renderReversiBoard = () => {
-  const legalMoves = getReversiMoves(reversiState.current);
-  reversiBoard.innerHTML = "";
-
-  reversiState.board.forEach((piece, index) => {
+  gomokuState.board.forEach((piece, index) => {
     const cell = document.createElement("button");
-    cell.className = "reversi-cell";
+    cell.className = "gomoku-cell";
     cell.type = "button";
     cell.dataset.index = `${index}`;
 
     if (piece) {
       cell.classList.add(piece === "black" ? "is-black" : "is-white");
-    } else if (legalMoves.includes(index)) {
-      cell.classList.add("is-hint");
     }
 
-    reversiBoard.append(cell);
+    gomokuBoard.append(cell);
   });
 
-  updateReversiStatus();
-};
-
-const resetReversi = () => {
-  reversiState.board = Array(64).fill("");
-  reversiState.board[getReversiIndex(3, 3)] = "white";
-  reversiState.board[getReversiIndex(3, 4)] = "black";
-  reversiState.board[getReversiIndex(4, 3)] = "black";
-  reversiState.board[getReversiIndex(4, 4)] = "white";
-  reversiState.current = "black";
-  reversiState.finished = false;
-  renderReversiBoard();
-};
-
-const switchReversiPlayer = () => {
-  reversiState.current = reversiState.current === "black" ? "white" : "black";
-
-  if (getReversiMoves(reversiState.current).length === 0) {
-    reversiState.current = reversiState.current === "black" ? "white" : "black";
-
-    if (getReversiMoves(reversiState.current).length === 0) {
-      reversiState.finished = true;
-    }
+  if (!gomokuState.finished) {
+    gomokuStatus.textContent = `${gomokuState.current === "black" ? "黑棋" : "白棋"}落子，先连成五子获胜。`;
   }
+};
+
+const hasGomokuWinner = (row, col, piece) => {
+  return gomokuDirections.some(([rowStep, colStep]) => {
+    let count = 1;
+
+    [-1, 1].forEach((direction) => {
+      let nextRow = row + rowStep * direction;
+      let nextCol = col + colStep * direction;
+
+      while (nextRow >= 0 && nextRow < 15 && nextCol >= 0 && nextCol < 15) {
+        if (gomokuState.board[getGomokuIndex(nextRow, nextCol)] !== piece) {
+          break;
+        }
+
+        count += 1;
+        nextRow += rowStep * direction;
+        nextCol += colStep * direction;
+      }
+    });
+
+    return count >= 5;
+  });
+};
+
+const resetGomoku = () => {
+  gomokuState.board = Array(15 * 15).fill("");
+  gomokuState.current = "black";
+  gomokuState.finished = false;
+  renderGomoku();
 };
 
 const updateFishStatus = () => {
   fishStatus.textContent = `功德：${fishState.merit}
 连击：${fishState.combo}`;
+};
+
+const getFishAudioContext = () => {
+  if (!fishState.audioContext) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) {
+      return null;
+    }
+
+    fishState.audioContext = new AudioContextClass();
+  }
+
+  return fishState.audioContext;
+};
+
+const playFishSound = async () => {
+  const audioContext = getFishAudioContext();
+
+  if (!audioContext) {
+    return;
+  }
+
+  if (audioContext.state === "suspended") {
+    await audioContext.resume();
+  }
+
+  const nowTime = audioContext.currentTime;
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  const filterNode = audioContext.createBiquadFilter();
+
+  oscillator.type = "triangle";
+  oscillator.frequency.setValueAtTime(220, nowTime);
+  oscillator.frequency.exponentialRampToValueAtTime(170, nowTime + 0.12);
+
+  filterNode.type = "bandpass";
+  filterNode.frequency.setValueAtTime(720, nowTime);
+  filterNode.Q.setValueAtTime(2.6, nowTime);
+
+  gainNode.gain.setValueAtTime(0.0001, nowTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.32, nowTime + 0.01);
+  gainNode.gain.exponentialRampToValueAtTime(0.0001, nowTime + 0.22);
+
+  oscillator.connect(filterNode);
+  filterNode.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  oscillator.start(nowTime);
+  oscillator.stop(nowTime + 0.24);
+};
+
+const spawnFishFloatText = () => {
+  const floatText = document.createElement("span");
+  const message =
+    Math.random() < 0.7
+      ? "功德+1"
+      : fishBlessings[Math.floor(Math.random() * fishBlessings.length)];
+  const randomOffset = Math.round((Math.random() - 0.5) * 90);
+
+  floatText.className = "fish-float";
+  floatText.textContent = message;
+  floatText.style.left = `calc(50% + ${randomOffset}px)`;
+  fishWrap.append(floatText);
+
+  window.setTimeout(() => {
+    floatText.remove();
+  }, 1400);
+
+  return message;
 };
 
 yearEl.textContent = new Date().getFullYear();
@@ -783,61 +1098,31 @@ reactionStage.addEventListener("click", () => {
   resetReactionTest(getReactionReport(cost));
 });
 
-memoryBoard.addEventListener("click", (event) => {
-  const cardButton = event.target.closest(".memory-card");
+if (songSelect && musicPads && songPlay && songPractice && songStop && musicStatus) {
+  songSelect.addEventListener("click", (event) => {
+    const songButton = event.target.closest(".song-chip");
 
-  if (!cardButton || memoryState.locked) {
-    return;
-  }
-
-  const index = Number(cardButton.dataset.index);
-  const card = memoryState.cards[index];
-
-  if (card.open || card.matched) {
-    return;
-  }
-
-  card.open = true;
-  memoryState.openedIndexes.push(index);
-  renderMemoryBoard();
-
-  if (memoryState.openedIndexes.length < 2) {
-    return;
-  }
-
-  memoryState.moves += 1;
-  memoryState.locked = true;
-  const [firstIndex, secondIndex] = memoryState.openedIndexes;
-  const firstCard = memoryState.cards[firstIndex];
-  const secondCard = memoryState.cards[secondIndex];
-
-  if (firstCard.symbol === secondCard.symbol) {
-    firstCard.matched = true;
-    secondCard.matched = true;
-    memoryState.matchedCount += 1;
-    memoryState.openedIndexes = [];
-    memoryState.locked = false;
-    updateMemoryStatus();
-    renderMemoryBoard();
-
-    if (memoryState.matchedCount === memorySymbols.length) {
-      memoryStatus.textContent = `完成，步数：${memoryState.moves}`;
+    if (!songButton) {
+      return;
     }
 
-    return;
-  }
+    selectSong(songButton.dataset.song);
+  });
 
-  window.setTimeout(() => {
-    firstCard.open = false;
-    secondCard.open = false;
-    memoryState.openedIndexes = [];
-    memoryState.locked = false;
-    updateMemoryStatus();
-    renderMemoryBoard();
-  }, 650);
-});
+  musicPads.addEventListener("click", (event) => {
+    const pad = event.target.closest(".music-pad");
 
-memoryReset.addEventListener("click", resetMemoryGame);
+    if (!pad) {
+      return;
+    }
+
+    handleMusicInput(Number(pad.dataset.pad));
+  });
+
+  songPlay.addEventListener("click", autoplaySong);
+  songPractice.addEventListener("click", startPracticeMode);
+  songStop.addEventListener("click", stopMusicMode);
+}
 
 tapTarget.addEventListener("click", () => {
   if (!tapState.active) {
@@ -896,40 +1181,61 @@ breathButton.addEventListener("click", () => {
 
 calorieButton.addEventListener("click", calculateCalories);
 
-reversiBoard.addEventListener("click", (event) => {
-  const cell = event.target.closest(".reversi-cell");
+gomokuBoard.addEventListener("click", (event) => {
+  const cell = event.target.closest(".gomoku-cell");
 
-  if (!cell || reversiState.finished) {
+  if (!cell || gomokuState.finished) {
     return;
   }
 
   const index = Number(cell.dataset.index);
-  const flips = getReversiFlips(index, reversiState.current);
-
-  if (flips.length === 0) {
+  if (gomokuState.board[index]) {
     return;
   }
 
-  reversiState.board[index] = reversiState.current;
-  flips.forEach((flipIndex) => {
-    reversiState.board[flipIndex] = reversiState.current;
-  });
-  switchReversiPlayer();
-  renderReversiBoard();
+  const row = Math.floor(index / 15);
+  const col = index % 15;
+  const piece = gomokuState.current;
+
+  gomokuState.board[index] = piece;
+
+  if (hasGomokuWinner(row, col, piece)) {
+    gomokuState.finished = true;
+    renderGomoku();
+    gomokuStatus.textContent = `${piece === "black" ? "黑棋" : "白棋"}获胜。`;
+    return;
+  }
+
+  if (gomokuState.board.every(Boolean)) {
+    gomokuState.finished = true;
+    renderGomoku();
+    gomokuStatus.textContent = "平局。";
+    return;
+  }
+
+  gomokuState.current = piece === "black" ? "white" : "black";
+  renderGomoku();
 });
 
-reversiReset.addEventListener("click", resetReversi);
+gomokuReset.addEventListener("click", resetGomoku);
 
 fishButton.addEventListener("click", () => {
   fishState.merit += 1;
   fishState.combo += 1;
-  fishText.textContent = fishState.combo % 10 === 0 ? "大功德" : "咚";
+  const fishMessage = spawnFishFloatText();
+  fishText.textContent = fishMessage;
   updateFishStatus();
+  playFishSound().catch(() => {});
+  fishButton.classList.remove("is-hit");
+  window.requestAnimationFrame(() => {
+    fishButton.classList.add("is-hit");
+  });
 
   window.clearTimeout(fishState.timerId);
   fishState.timerId = window.setTimeout(() => {
     fishState.combo = 0;
     fishText.textContent = "敲一下";
+    fishButton.classList.remove("is-hit");
     updateFishStatus();
   }, 1800);
 });
@@ -937,13 +1243,18 @@ fishButton.addEventListener("click", () => {
 fishReset.addEventListener("click", () => {
   fishState.merit = 0;
   fishState.combo = 0;
+  window.clearTimeout(fishState.timerId);
   fishText.textContent = "敲一下";
+  fishButton.classList.remove("is-hit");
+  fishWrap.querySelectorAll(".fish-float").forEach((node) => node.remove());
   updateFishStatus();
 });
 
-resetMemoryGame();
+if (songSelect && musicPads && songPlay && songPractice && songStop && musicStatus) {
+  selectSong(musicState.currentSong);
+}
 renderColorRound();
-resetReversi();
+resetGomoku();
 updateFishStatus();
 
 backToTopButton.addEventListener("click", () => {

@@ -35,7 +35,7 @@
           </div>
           <div>
             <p class="panel-label">推荐玩法</p>
-            <p class="panel-title">反应测试 · 记忆翻牌 · 黑白棋</p>
+            <p class="panel-title">反应测试 · 4x4 魔方 · 双人五子棋</p>
           </div>
           <div>
             <p class="panel-label">今日状态</p>
@@ -161,18 +161,6 @@
         <article class="play-card">
           <div class="play-card-head">
             <p class="work-index">02</p>
-            <h3>记忆翻牌</h3>
-          </div>
-          <div class="memory-board" id="memoryBoard" aria-label="记忆翻牌棋盘"></div>
-          <div class="mini-row">
-            <p class="mini-status" id="memoryStatus">步数：0，已配对：0/4</p>
-            <button class="small-button" id="memoryReset" type="button">重开</button>
-          </div>
-        </article>
-
-        <article class="play-card">
-          <div class="play-card-head">
-            <p class="work-index">03</p>
             <h3>节奏连击</h3>
           </div>
           <div class="tap-game" id="tapGame">
@@ -186,7 +174,7 @@
 
         <article class="play-card">
           <div class="play-card-head">
-            <p class="work-index">04</p>
+            <p class="work-index">03</p>
             <h3>颜色捕手</h3>
           </div>
           <div class="color-game">
@@ -201,7 +189,7 @@
 
         <article class="play-card">
           <div class="play-card-head">
-            <p class="work-index">05</p>
+            <p class="work-index">04</p>
             <h3>呼吸节拍</h3>
           </div>
           <div class="breath-game">
@@ -215,7 +203,7 @@
 
         <article class="play-card">
           <div class="play-card-head">
-            <p class="work-index">06</p>
+            <p class="work-index">05</p>
             <h3>运动消耗</h3>
           </div>
           <div class="form-grid">
@@ -244,19 +232,19 @@
 
         <article class="play-card">
           <div class="play-card-head">
-            <p class="work-index">07</p>
-            <h3>黑白棋</h3>
+            <p class="work-index">06</p>
+            <h3>双人五子棋</h3>
           </div>
-          <div class="reversi-board" id="reversiBoard" aria-label="黑白棋棋盘"></div>
+          <div class="gomoku-board" id="gomokuBoard" aria-label="五子棋棋盘"></div>
           <div class="mini-row">
-            <p class="mini-status" id="reversiStatus">黑棋先手。</p>
-            <button class="small-button" id="reversiReset" type="button">重开</button>
+            <p class="mini-status" id="gomokuStatus">黑棋先手，先连成五子获胜。</p>
+            <button class="small-button" id="gomokuReset" type="button">重开</button>
           </div>
         </article>
 
         <article class="play-card">
           <div class="play-card-head">
-            <p class="work-index">08</p>
+            <p class="work-index">07</p>
             <h3>今日敲木鱼</h3>
           </div>
           <div class="fish-wrap" id="fishWrap">
@@ -269,6 +257,42 @@
             <p class="mini-status" id="fishStatus">功德：0</p>
             <button class="small-button" id="fishReset" type="button">清零</button>
           </div>
+        </article>
+
+        <article class="play-card links-card">
+          <div class="play-card-head">
+            <p class="work-index">08</p>
+            <h3>小游戏导航</h3>
+          </div>
+          <div class="links-sections">
+            <section class="links-section">
+              <h4>休闲 / 益智类</h4>
+              <div class="links-grid">
+                <a class="game-link-button" href="https://play2048.co/" target="_blank" rel="noreferrer">2048</a>
+                <a class="game-link-button" href="https://flappybird.io/" target="_blank" rel="noreferrer">Flappy Bird</a>
+                <a class="game-link-button" href="https://tetris.com/play-tetris" target="_blank" rel="noreferrer">Tetris (俄罗斯方块)</a>
+                <a class="game-link-button" href="https://sudoku.com/" target="_blank" rel="noreferrer">Sudoku (数独)</a>
+                <a class="game-link-button" href="https://solitaired.com/" target="_blank" rel="noreferrer">Solitaire (纸牌)</a>
+              </div>
+            </section>
+            <section class="links-section">
+              <h4>街机 / 动作类</h4>
+              <div class="links-grid">
+                <a class="game-link-button" href="https://www.google.com/logos/2010/pacman10-hp.html" target="_blank" rel="noreferrer">Pac-Man</a>
+                <a class="game-link-button" href="https://playsnake.org/" target="_blank" rel="noreferrer">Snake (贪吃蛇)</a>
+                <a class="game-link-button" href="https://minesweeper.online/" target="_blank" rel="noreferrer">Minesweeper (扫雷)</a>
+                <a class="game-link-button" href="https://slowroads.io/#A1-5d8f670f@0" target="_blank" rel="noreferrer">Slow Roads</a>
+              </div>
+            </section>
+            <section class="links-section">
+              <h4>多人 / IO 游戏</h4>
+              <div class="links-grid">
+                <a class="game-link-button" href="https://paper.io/" target="_blank" rel="noreferrer">Paper.io</a>
+                <a class="game-link-button" href="https://diep.io/" target="_blank" rel="noreferrer">Diep.io</a>
+              </div>
+            </section>
+          </div>
+          <p class="mini-status">只保留了我这边能正常打开或返回页面的地址。</p>
         </article>
       </div>
     </section>
